@@ -1,28 +1,23 @@
 import Movie from "./Movie"
 import { useDispatch, useSelector, } from "react-redux"
-import { get } from "./dataSlice"
-import { useEffect, useRef, useState } from "react"
-import axios from 'axios'
+import { getApi } from "./dataSlice"
+import { useEffect } from "react"
 import { useLoaderData } from "react-router-dom"
 
 const Home = ()=>{
-    const data = useSelector((state)=>state.data.value)
+    const data = useSelector((state)=>state.data)
     const dispatch = useDispatch() 
     let st = useLoaderData() || "harry"
-    const check = useRef(false)
 
     useEffect( ()=>{
-    check.current=false
-    dispatch(get([]))
-        axios.get(`https://www.omdbapi.com/?apikey=abaeb6be&s=${st}`).then((data)=>{
-            check.current=true
-                dispatch(get(data.data.Search))
-            
-        })
+    
+    dispatch(getApi(st))
+  
+        
         
     },[st])
 
-    if(!check.current){
+    if(data.loading){
         return (
             <div style={{marginTop:"35vh",textAlign:"center"}}>
 
@@ -36,9 +31,9 @@ const Home = ()=>{
 
         return (
             <div className="mDiv">
-            {data? data.map((d)=>{
+            {!data.error ? data.value.map((d)=>{
                 return <Movie info={d}/>
-            }):"No Result Found"}
+            }):data.error}
 
         </div>
         
