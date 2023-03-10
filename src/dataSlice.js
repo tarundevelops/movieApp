@@ -28,7 +28,7 @@ extraReducers:(builder)=>{
       state.loading = true;
       state.value=[]
       state.error=""
-      console.log("Pending")
+      
     }
 
   )
@@ -36,7 +36,7 @@ extraReducers:(builder)=>{
     getApi.fulfilled,(state,action)=>{
       state.loading = false
       if(action.payload.data.Response == "True"){
-console.log(action.payload)
+
         state.value = action.payload.data.Search
       }else{
         state.error = "No result found"
